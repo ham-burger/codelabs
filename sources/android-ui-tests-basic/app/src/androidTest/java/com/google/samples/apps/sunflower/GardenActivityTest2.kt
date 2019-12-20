@@ -23,37 +23,10 @@ class GardenActivityTest2 {
     fun gardenActivityTest() {
 
         // MyGardenPage#goPlantList(): PlantListPage
-        val appCompatImageButton = onView(
-                allOf(withContentDescription("Open navigation drawer"),
-                        childAtPosition(
-                                allOf(withId(R.id.toolbar),
-                                        childAtPosition(
-                                                withId(R.id.appbar),
-                                                0)),
-                                1),
-                        isDisplayed()))
-        appCompatImageButton.perform(click())
-
-        val navigationMenuItemView = onView(
-                allOf(childAtPosition(
-                        allOf(withId(R.id.design_navigation_view),
-                                childAtPosition(
-                                        withId(R.id.navigation_view),
-                                        0)),
-                        2),
-                        isDisplayed()))
-        navigationMenuItemView.perform(click())
+        goPlantList()
 
         // PlantListPage#showPlantDetail(plantName: String): PlantDetailPage
-        val appCompatTextView = onView(
-                allOf(withId(R.id.plant_item_title), withText("Avocado"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.plant_list),
-                                        1),
-                                0),
-                        isDisplayed()))
-        appCompatTextView.perform(click())
+        showPlantDetail("Avocado")
 
         // PlantDetailPage#addToMyGarden(): PlantDetailPage
         val floatingActionButton = onView(
@@ -91,14 +64,53 @@ class GardenActivityTest2 {
         appCompatImageButton3.perform(click())
 
         // MyGardenPage#assertPlanted(plantName: String): MyGardenPage
-        val textView = onView(
-                allOf(withId(R.id.plant_date), withText("Avocado planted"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.garden_list),
-                                        0),
-                                1),
-                        isDisplayed()))
-        textView.check(matches(withText("Avocado planted")))
+        assertPlanted("Avocado")
     }
+}
+
+private fun showPlantDetail(plantName: String) {
+    val appCompatTextView = onView(
+            allOf(withId(R.id.plant_item_title), withText(plantName),
+                    childAtPosition(
+                            childAtPosition(
+                                    withId(R.id.plant_list),
+                                    1),
+                            0),
+                    isDisplayed()))
+    appCompatTextView.perform(click())
+}
+
+private fun assertPlanted(plantName: String) {
+    val textView = onView(
+            allOf(withId(R.id.plant_date), withText("$plantName planted"),
+                    childAtPosition(
+                            childAtPosition(
+                                    withId(R.id.garden_list),
+                                    0),
+                            1),
+                    isDisplayed()))
+    textView.check(matches(withText("$plantName planted")))
+}
+
+fun goPlantList() {
+    val appCompatImageButton = onView(
+            allOf(withContentDescription("Open navigation drawer"),
+                    childAtPosition(
+                            allOf(withId(R.id.toolbar),
+                                    childAtPosition(
+                                            withId(R.id.appbar),
+                                            0)),
+                            1),
+                    isDisplayed()))
+    appCompatImageButton.perform(click())
+
+    val navigationMenuItemView = onView(
+            allOf(childAtPosition(
+                    allOf(withId(R.id.design_navigation_view),
+                            childAtPosition(
+                                    withId(R.id.navigation_view),
+                                    0)),
+                    2),
+                    isDisplayed()))
+    navigationMenuItemView.perform(click())
 }
